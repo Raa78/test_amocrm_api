@@ -15,10 +15,10 @@ let limit = 1;
 
 let page = 1;
 
-const HOST = "https://introverttesttask1.amocrm.ru";
+const HOST = "https://introverttesttask2.amocrm.ru";
 
 let apiRoutes = {
-  contacts: "/api/v4/contacts",
+  contacts: "/api/v4/contacts?order[id]=asc",  // наверное, выборку лучше делать с сортировкой, что бы не задублировать одинаковые контакты на разных страницах
   tasks: "/api/v4/tasks",
 };
 
@@ -29,9 +29,9 @@ let listMessages = {
   },
   no_contacts: {
     tag: "json_contact",
-    messages: "В базе нет контактов.",
+    messages: "В базе больше нет контактов.",
   },
-  tasks: {
+  get_error_tasks: {
     tag: "json_tasks",
     messages: "Что-то пошло не так c загрузкой задач.",
   },
@@ -40,7 +40,7 @@ let listMessages = {
 const taskLabel = "Контакт без сделок";
 
 const TOKEN_AMO =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjUwNzZiNmFiY2IzZWM1ZTE4N2I4N2FmOGNjMmQ0NWEyMjcxNDc1MmNiNTA3MGQ5M2M0Njg3NWIzYTE3ODczNTFiM2VlYmM2NjZhNDAzNzgwIn0.eyJhdWQiOiIwNTRlZTliMi0wNjlkLTRhNTMtYWE5MS04ZTA0ZjM4NjI5YTQiLCJqdGkiOiI1MDc2YjZhYmNiM2VjNWUxODdiODdhZjhjYzJkNDVhMjI3MTQ3NTJjYjUwNzBkOTNjNDY4NzViM2ExNzg3MzUxYjNlZWJjNjY2YTQwMzc4MCIsImlhdCI6MTczMTE5MzkzMSwibmJmIjoxNzMxMTkzOTMxLCJleHAiOjE4NjE5MjAwMDAsInN1YiI6IjExNzU2MTMwIiwiZ3JhbnRfdHlwZSI6IiIsImFjY291bnRfaWQiOjMyMDU3NjQyLCJiYXNlX2RvbWFpbiI6ImFtb2NybS5ydSIsInZlcnNpb24iOjIsInNjb3BlcyI6WyJjcm0iLCJmaWxlcyIsImZpbGVzX2RlbGV0ZSIsIm5vdGlmaWNhdGlvbnMiLCJwdXNoX25vdGlmaWNhdGlvbnMiXSwiaGFzaF91dWlkIjoiMzAzM2ZjNzMtMTBhMC00YzVjLThkMmQtMDAyMWRlZDEyZTg0IiwiYXBpX2RvbWFpbiI6ImFwaS1iLmFtb2NybS5ydSJ9.bmgA75Rqcy-BBu9ey0Ip2iJ0fR_e_oOZ5FmeXtCeRM0610G0uc-N_BA2Q9ERF0nYx36n4wCL8r9qJQXsyMcv_mFXCuqXhQFPUJP-xwCkmqIM7w_-BF8_N3-EsP0Yoz0rc3ALuy6rufjNS4aGBwkWcMFWQhapb5IR1qE65GIzfrNH1dU3ADq9h-6V2qJ2jSkUbYgPjOZ7Mez4pUVBNBuBGu0E6fJI_K-VmFxqIZRsB55serShlm_Hwe9oI-iDbIjwix1PUXT2NFXLufQeoH_j0IWho5S5oJcCOtObdMCkKFZVFkDw2j6UPIAf-K1EsXtjrA0Es7TGHI-1j9-f4Q3vDg";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjU0NmMzNGJmN2IyYzFjYzBjOTg2MTY5Y2NhMmQ2Y2EwY2MzMzJiZDc0YmRkZjAzZTg1Y2VlYzU5ZmY4ODY2NTI4NmQxMzE3ZTdlMjdhOWFkIn0.eyJhdWQiOiI3ZDE2NDM1NS1mNmM3LTQwZTgtOTY5ZS02MGNmMzdmZTg3OGQiLCJqdGkiOiI1NDZjMzRiZjdiMmMxY2MwYzk4NjE2OWNjYTJkNmNhMGNjMzMyYmQ3NGJkZGYwM2U4NWNlZWM1OWZmODg2NjUyODZkMTMxN2U3ZTI3YTlhZCIsImlhdCI6MTczMTUwNzA2MSwibmJmIjoxNzMxNTA3MDYxLCJleHAiOjE3NjE5NTUyMDAsInN1YiI6IjExNzU2MTMwIiwiZ3JhbnRfdHlwZSI6IiIsImFjY291bnRfaWQiOjMyMDY0ODk0LCJiYXNlX2RvbWFpbiI6ImFtb2NybS5ydSIsInZlcnNpb24iOjIsInNjb3BlcyI6WyJjcm0iLCJmaWxlcyIsImZpbGVzX2RlbGV0ZSIsIm5vdGlmaWNhdGlvbnMiLCJwdXNoX25vdGlmaWNhdGlvbnMiXSwiaGFzaF91dWlkIjoiZGY4ZTE0NjYtMTMxNi00YzUwLTk3MGUtMGJjZDcyYjQyNjRkIiwiYXBpX2RvbWFpbiI6ImFwaS1iLmFtb2NybS5ydSJ9.MDBmnsoDH6nUexMWCo5cwAdSnhZtuPcSuipQ3F0SD8bDYX52uJdl-FEpyxcGpXAouShGOcu67Wz1ioVQnu5E-9AXx0wtURjFVhKOx30xPIKJoaOJDflc8SLM9-w49o3sWiSl3ixqCG5DoLA7Erz1Au5f7gWItlFlDICpqZZ9oZZSQ5bZ2LlM8q6BRJ67nmEAVndNYr5c0yD0YmcB1lnl1y3IhMB2nCKWbIVcQE-eJGxDCWLmtk6qmDzH0eAnle0yGd7iX7yMQuQUmsplmti03kpeIGmLt0ywqh3QxgLEtxjPuY-fb-oumM5pIaQJ4EitdyF13-j_WE4r4y7PjweG_A";
 
 
 function request(
@@ -114,19 +114,17 @@ function getContacts() {
       console.log('getContacts>>>', response, status);
 
       if(!!response._embedded.contacts){
-        let listContacts = response._embedded.contacts
+        let contacts = response._embedded.contacts
 
-        let listContactsNoLeads = checkLeads(listContacts);
+        let contactsWithoutLeads = checkLeads(contacts);
 
-        createTasks(listContactsNoLeads);
+        getTasks(contactsWithoutLeads);
 
+        page++;
       }
-
       getContacts();  // рекурсивно пробегаемся по всем страницам контактов
     },
   });
-
-  page++;
 }
 
 function checkLeads(listContacts){
@@ -143,8 +141,38 @@ function checkLeads(listContacts){
   return idContactsNoLeads;
 }
 
+function getTasks(contactsWithoutLeads){
+  console.log('checkDoubleTasks>>>', contactsWithoutLeads);
+  let filterApiTask = "?filter[task_type]=1&filter[is_completed]=0&filter[entity_type]=contacts";
+
+  request({
+    url: apiRoutes.tasks + filterApiTask,
+    metod: "GET",
+    callback: (response, status) => {
+      console.log('getTasks>>>', response, status, response);
+
+      if(status === "error") {
+        outputMessage(
+          listMessages.get_error_tasks.tag,
+          listMessages.get_error_tasks.messages
+        );
+        return;
+      }
+
+      if(status === "nocontent") {
+        createTasks(contactsWithoutLeads);
+        return;
+      }
+
+
+
+    },
+  });
+
+}
+
 function createTasks(listIdContactsNoLeads){
-  console.log('check_contacts>>', listIdContactsNoLeads);
+  console.log('createTasks>>', listIdContactsNoLeads);
 
   let packageLeads = [];
 
@@ -165,25 +193,26 @@ function createTasks(listIdContactsNoLeads){
     metod: "POST",
     data: JSON.stringify(packageLeads),
     callback: (response, status) => {
-      console.log('создание задачь>>>', response, status);
+      console.log('создание задачь >>>', response, status);
     },
   });
 
 }
 
-function getTasks() {
+// function getTasks() {
 
-  request({
-    url: "/api/v4/tasks",
-    metod: "GET",
-    data: {
-      limit: limit,
-      page: page,
-    },
-    callback: (response) => {
-      console.log(response);
-    },
-  });
-  page++;
+//   request({
+//     url: "/api/v4/tasks",
+//     metod: "GET",
+//     data: {
+//       limit: limit,
+//       page: page,
+//     },
+//     callback: (response) => {
+//       console.log(response);
+//     },
+//   });
+//   page++;
 
-}
+// }
+// checkDoubleTasks
