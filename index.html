@@ -1,35 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Тестовое задание Интроверт - AmoCRM API</title>
-  <style>
-    .btn_contact{
-      padding: 5px 10px;
-      font-size: 16px;
-      font-weight: 600;
-      border: 0.5px solid #000;
-      border-radius: 6px;
-      transition: 0.2s;
-      &:hover {
-        background-color: #000;
-        color: #fff;
-        cursor: pointer;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Тестовое задание Интроверт - AmoCRM API</title>
+    <style>
+      /* Reset CSS */
+      html {
+        box-sizing: border-box;
+        font-size: 16px;
       }
-    }
 
-  </style>
-</head>
-<body>
+      *,
+      *::after,
+      *::before {
+        box-sizing: inherit;
+        font-size: 1.2rem;
+      }
 
-  <pre id="contact"></pre>
-  <pre id="task"></pre>
-  <pre id="contacts_processed"></pre>
-  <button class="btn_contact">Создать задачи</button>
-  <pre id="test"></pre>
+      * {
+        margin: 0;
+        padding: 0;
+        border: none;
+      }
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="script.js"></script>
-</body>
+      h1,
+      h2,
+      h3 {
+        font-size: 2rem;
+      }
+
+      a,
+      a:hover,
+      a:link,
+      a:visited {
+        text-decoration: none;
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Style */
+      .container {
+        width: 100vw;
+        height: 100vh;
+        padding: 20px 10px;
+        .wrap {
+          max-width: 1080px;
+          margin: 0 auto;
+
+          h1 {
+            margin-bottom: 10px;
+          }
+
+          .article {
+            margin-bottom: 10px;
+          }
+
+          .btn_contact {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+            font-weight: 600;
+            border: 0.5px solid #000;
+            border-radius: 6px;
+            transition: 0.2s;
+            &:hover {
+              background-color: #000;
+              color: #fff;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="wrap">
+
+        <h1>Тестовая задача на вакансию - Программист PHP (Junior)</h1>
+        <div class="article">
+          <div>
+            Необходимо написать js-скрипт, который работает с API системы
+            amoCRM. Скрипт должен для всех контактов без сделок создать новую
+            задачу с текстом “Контакт без сделок”.
+          </div>
+          <div>
+            <div style="font-weight: 600">Пояснения:</div>
+            <div>
+              amoCRM — CRM-система ведения клиентов, хранящая информацию о
+              компаниях и контактах, а также сделках с клиентами. У каждого
+              контакта может быть неограниченное число сделок, которые должен
+              обработать сотрудник в процессе работы.
+            </div>
+          </div>
+          <div>
+            <div>API:</div>
+            <a href=" https://www.amocrm.ru/developers/content/crm_platform/api-reference">
+              https://www.amocrm.ru/developers/content/crm_platform/api-reference
+            </a>
+          </div>
+          <div>
+            На данном этапе важно продемонстрировать общее умение работать с JS
+            (допускается использование jQuery), минимальное знание алгоритмов,
+            чистоту кода.
+          </div>
+        </div>
+
+        <div>
+          <pre id="contact"></pre>
+          <pre id="task"></pre>
+          <pre id="contacts_processed"></pre>
+          <button class="btn_contact">Создать задачи</button>
+          <pre id="test"></pre>
+        </div>
+
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="script.js"></script>
+
+  </body>
 </html>
