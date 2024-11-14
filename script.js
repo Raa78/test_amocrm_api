@@ -20,7 +20,7 @@ let listMessages = {
     messages: "Что-то пошло не так c получением контактов.",
   },
   no_contacts: {
-    tag: "#contact",
+    tag: "#contacts_processed",
     messages: "Все контакты обработаны.",
   },
   get_error_tasks: {
@@ -85,7 +85,8 @@ function request(
 // Вывод сообщений
 function outputMessage(tag, messages){
   const dataString = JSON.stringify(messages, null, "  ");
-  $(tag).text(dataString);
+  // $(tag).text(dataString);
+  $(tag).append(`<p>${dataString}</p>`);
 }
 
 
@@ -168,6 +169,7 @@ function getTasks(contactsWithoutLeads){
 
       if(status === "nocontent") {
         createTasks(contactsWithoutLeads);
+        tasksForContacts(contactsWithoutLeads);
         return;
       }
 
@@ -183,6 +185,7 @@ function getTasks(contactsWithoutLeads){
       });
 
       createTasks(contactsWithoutLeads);
+      tasksForContacts(contactsWithoutLeads);
     },
   });
 }
@@ -212,8 +215,8 @@ function createTasks(listIdContactsNoLeads){
       metod: "POST",
       data: JSON.stringify(packageLeads),
 
-      callback: (response) => {
-        console.log('ЗАДАЧИ СОЗДАНЫ >>>', response._embedded.tasks);
+      callback: (response, status) => {
+        console.log('ЗАДАЧИ СОЗДАНЫ >>>', response._embedded.tasks, status);
 
         outputMessage(
           listMessages.tasks_created.tag,
@@ -221,6 +224,8 @@ function createTasks(listIdContactsNoLeads){
         );
       },
     });
+
+    return;
   };
 
   outputMessage(
@@ -229,6 +234,41 @@ function createTasks(listIdContactsNoLeads){
   );
 }
 
+function tasksForContacts(listContacts){
+
+  let filterApiTask = "?filter[task_type]=1&filter[is_completed]=0&filter[entity_type]=contacts";
+
+  if (listContacts.length){
+    console.log('tasksForContacts >>>', listContacts);
+
+    // request({
+    //   url: API.amocrm.routes.contacts,
+    //   metod: "GET",
+    //   data: JSON.stringify(packageLeads),
+
+    //   callback: (response, status) => {
+    //     console.log('ЗАДАЧИ СОЗДАНЫ >>>', response._embedded.tasks, status);
+
+    //     outputMessage(
+    //       listMessages.tasks_created.tag,
+    //       listMessages.tasks_created.messages
+    //     );
+    //   },
+    // });
+
+  }
+}
+
+
+request({
+  // url: "/api/v4/contacts",
+  url: "/api/v4/contacts" + '?filter[tags][id]=[102563,102573]',
+  metod: "GET",
+  data: {},
+  callback: (response, status) => {
+    console.log('СПИСОК КОНАТКТОВ >>>', response, status);
+  },
+});
 
 $(".btn_contact").on("click", function() {
   $(this).attr("disabled", true);
